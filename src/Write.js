@@ -1,6 +1,6 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 import Navbar from "./Navbar";
 import { readOne } from "./api/read";
 import { create } from "./api/create";
@@ -9,19 +9,20 @@ import { update } from "./api/update";
 export default function Write({ label = '새 글 쓰기' }) {
   const params = useParams()
   const navigate = useNavigate();
-  const { data: article, error } = useSWR(params.id ? `readOne-${params.id}` : null, readOne(params.id))
   const { mutate } = useSWRConfig()
-  const [title, setTitle] = useState(article ? article.title : '')
-  const [body, setBody] = useState(article ? article.body : '')
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
 
   useEffect(() => {
-    if(article) {
-      setTitle(article.title)
-      setBody(article.body)
+    if(params.id) {
+      readOne(params.id)()
+      .then(article => {
+        setTitle(article.title)
+        setBody(article.body)
+      })
     }
-  }, [article])
+  }, [params.id])
 
-  if (error) return <div>failed to load</div>
   if(params.id) {
     label = '글 수정'
   }
@@ -32,10 +33,7 @@ export default function Write({ label = '새 글 쓰기' }) {
   const submitHandler = async () => {
 
     if (params.id) {
-      console.log(article)
-      delete article._id
       const result = await mutate(`update-${params.id}`, update(params.id, {
-        ...article,
         title,
         body,
         lastUpdated: new Date().toISOString()
@@ -71,7 +69,7 @@ export default function Write({ label = '새 글 쓰기' }) {
     }
   }
 
-  if(!article && params.id) {
+  if(!title && params.id) {
     console.log(params.id)
     return (<div className="min-h-screen">
       <Navbar>

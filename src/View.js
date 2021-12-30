@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import Article from "./Article";
 import Navbar from "./Navbar";
+import ErrorPage from "./ErrorPage";
 import { readAll } from "./api/read";
 import { deleteOne } from "./api/delete";
 
@@ -15,10 +16,11 @@ export default function View() {
       console.log(result)
 
       alert('글을 성공적으로 지웠습니다.')
+      readAll()()
     }
   }
 
-  if (error) return <div>failed to load</div>
+  if (error) return <ErrorPage />
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -44,6 +46,16 @@ export default function View() {
             </Article>
           )
         }
+
+        {data && data.length === 0 ?
+          <div className="group max-w-md mx-auto w-full md:w-9/12 border-gray-300 border-2 border-dashed rounded-xl overflow-hidden md:max-w-screen-lg m-6">
+          <div className="md:flex">
+            <div className="p-8 grow">
+              <div className="block mt-1 text-lg text-center leading-tight text-gray-400 mb-2">아직 게시물이 없어요. 새 글을 쓰러 가볼까요?</div>
+            </div>
+          </div>
+        </div>
+        : ''}
       </div>
     </div>
   )
