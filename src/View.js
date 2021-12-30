@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import useSWR from "swr";
 import Article from "./Article";
 import Navbar from "./Navbar";
+import { readAll } from "./api/read";
 
 export default function View() {
+  const { data, error } = useSWR('readAll', readAll())
+
+  if (error) return <div>failed to load</div>
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar>
@@ -11,14 +17,16 @@ export default function View() {
         </Link>
       </Navbar>
 
-      <div className="flex flex-wrap px-12">
-        {[1,2,3].map(() => {
-          return <Article title="카페라떼가 정말 맛있는지에 대한 심도있는 고찰을 열심히 해 보았다" author="김코딩" lastUpdated={'2시간 전'}>
-          Until recently, the prevailing view assumed lorem ipsum was born as a nonsense text. “It's not Latin, though it looks like it, and it actually says nothing,” Before & After magazine answered a curious reader, “Its ‘words’ loosely approximate the frequency with which letters occur in English, which is why at a glance it looks pretty real.”
-          As Cicero would put it, “Um, not so fast.”
-          The placeholder text, beginning with the line “Lorem ipsum dolor sit amet, consectetur adipiscing elit”, looks like Latin because in its youth, centuries ago, it was Latin.
-          </Article>
-        })}
+      <div className="flex flex-wrap md:px-12 px-5">
+        {!data ?
+          [1,2,3].map(i => <Article key={i} />)
+          :
+          data.map(({ _id, title, body, author }) =>
+            <Article key={_id} id={_id} title={title} author={author?.name || '익명'} lastUpdated={'2시간 전'}>
+              {body}
+            </Article>
+          )
+        }
       </div>
     </div>
   )

@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.placeholder-item {
+  position: relative;
+  overflow: hidden;
+  background-color: #efefef;
+  color: transparent;
+}
+
+.placeholder-item::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: -150px;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #efefef 30%, #dadada 50%, #efefef 100%);
+  animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+@keyframes load {
+  from {
+      left: -150px;
+  }
+  to   {
+      left: 100%;
+  }
+}

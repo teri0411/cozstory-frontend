@@ -11,6 +11,7 @@ ReactDOM.render(
     <Routes>
       <Route path="/" element={<View />} />
       <Route path="new" element={<Write />} />
+      <Route path="article/:id/edit" element={<Write />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')

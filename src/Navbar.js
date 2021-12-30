@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Navbar({children}) {
+export default function Navbar({ children }) {
   return <div className="sticky top-0 z-40 w-full backdrop-blur flex-none transition-colors duration-500 lg:z-50 lg:border-b lg:border-gray-900/10 dark:border-gray-50/[0.06] bg-white/90 supports-backdrop-blur:bg-white/95 dark:bg-gray-900/75">
     <div className="max-w-8xl mx-auto">
       <div className="py-4 border-b border-gray-900/10 lg:px-8 lg:border-0 dark:border-gray-300/10 px-4 lg:mx-0">
