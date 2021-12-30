@@ -1,5 +1,5 @@
 export function readAll() {
-  return () => fetch('http://localhost:3000/article').then(resp => resp.json())
+  return () => fetch('http://localhost:3000/article').then(resp => resp.json()).then(arr => arr.reverse())
 }
 
 export function readOne(id) {
